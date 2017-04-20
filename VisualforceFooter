@@ -1,7 +1,6 @@
-<apex:page standardController="Case" extensions="DG_OnDemandCtrl" showHeader="true" sidebar="true" >
+<apex:page standardController="Case" showHeader="true" sidebar="true" >
     
     <apex:includeLightning/>
-    <apex:includeScript value="{!URLFOR($Resource.DG_Assets, 'js/lib/jquery.min.js')}"/>
     <apex:includeScript value="/support/console/39.0/integration.js" />
 
     <div id="lightning" />
@@ -24,25 +23,26 @@
                 currentCaseId = result.id; 
         	}
      
-            loadPredictionComponent();
+            loadLightiningComponent();
                    
         };
     
-    	function runPredictButton(){
+    	function manualRefresh(){
             
             sforce.console.getFocusedPrimaryTabObjectId(eventHandler);
             
      	}
             
-       	function loadPredictionComponent() {
-            
-            var namespacePrefix = '{!JSENCODE(namespacePrefix)}';
-            $Lightning.use(namespacePrefix + ':DG_OnDemand', function() {
-                $Lightning.createComponent(namespacePrefix + ':DG_OnDemandPrediction',
+       	function loadLightiningComponent() {
+            // Replace this with your lightning component
+            // Alternatively pass the parameter to your visuaforce controller if you are not using lightning
+            // Code creates the component and passes the current case id to the component
+            $Lightning.use(, function() {
+               
+                $Lightning.createComponent('MyLightningComponent',
                     {
-                        recordId: currentCaseId,
-    					saveMsg: '',
-                        statusMsg: ''                        
+                        recordId: currentCaseId
+    		                     
                     },
                     'lightning',
                     function(cmp) {
@@ -57,7 +57,7 @@
     </script>
     
     <div class="toggleContent">
- 		<button type="button" class="slds-button slds-button--brand DG-btn" onclick="runPredictButton();"  >Predict</button>
+ 		<button type="button" class="slds-button slds-button--brand DG-btn" onclick="manualRefresh();">Refresh</button>
     </div>
      
 </apex:page>
