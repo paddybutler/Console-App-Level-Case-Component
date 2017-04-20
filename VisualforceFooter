@@ -37,7 +37,7 @@
             // Replace this with your lightning component
             // Alternatively pass the parameter to your visuaforce controller if you are not using lightning
             // Code creates the component and passes the current case id to the component
-            $Lightning.use(, function() {
+            $Lightning.use( function() {
                
                 $Lightning.createComponent('MyLightningComponent',
                     {
