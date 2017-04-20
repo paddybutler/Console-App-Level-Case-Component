@@ -1,0 +1,63 @@
+<apex:page standardController="Case" extensions="DG_OnDemandCtrl" showHeader="true" sidebar="true" >
+    
+    <apex:includeLightning/>
+    <apex:includeScript value="{!URLFOR($Resource.DG_Assets, 'js/lib/jquery.min.js')}"/>
+    <apex:includeScript value="/support/console/39.0/integration.js" />
+
+    <div id="lightning" />
+
+    <script type="text/javascript">
+        
+        var currentCaseId;
+    	var lightComponentLoaded = false;
+              
+        var eventHandler = function (result) {
+        
+            // new tab clicked - destroy previous prediction component
+            if (lightComponentLoaded === true){
+          		sforce.console.getFocusedPrimaryTabObjectId();
+            	currentCaseId = result.objectId; 
+                vfcomponents.destroy();
+            }
+            // If the page has refreshed or just loaded
+            else{
+                currentCaseId = result.id; 
+        	}
+     
+            loadPredictionComponent();
+                   
+        };
+    
+    	function runPredictButton(){
+            
+            sforce.console.getFocusedPrimaryTabObjectId(eventHandler);
+            
+     	}
+            
+       	function loadPredictionComponent() {
+            
+            var namespacePrefix = '{!JSENCODE(namespacePrefix)}';
+            $Lightning.use(namespacePrefix + ':DG_OnDemand', function() {
+                $Lightning.createComponent(namespacePrefix + ':DG_OnDemandPrediction',
+                    {
+                        recordId: currentCaseId,
+    					saveMsg: '',
+                        statusMsg: ''                        
+                    },
+                    'lightning',
+                    function(cmp) {
+                        lightComponentLoaded = true;
+                    });
+            });
+            
+  		}
+    	
+    	sforce.console.onFocusedPrimaryTab(eventHandler);
+
+    </script>
+    
+    <div class="toggleContent">
+ 		<button type="button" class="slds-button slds-button--brand DG-btn" onclick="runPredictButton();"  >Predict</button>
+    </div>
+     
+</apex:page>
